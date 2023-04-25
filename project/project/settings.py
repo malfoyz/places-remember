@@ -45,11 +45,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.vk',
     'bootstrap5',
 
     # my apps
     'main.apps.MainConfig',
 ]
+
+SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_SECRET_KEY'),
+            'key': '',
+        },
+    },
+    'vk': {
+        'APP': {
+            'client_id': os.getenv('VK_CLIENT_ID'),
+            'secret': os.getenv('VK_SECRET_KEY'),
+            'key': '',
+        },
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +103,16 @@ TEMPLATES = [
         },
     },
 ]
+
+# django-allauth
+# https://django-allauth.readthedocs.io/en/latest/installation.html
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# End django-allauth
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
