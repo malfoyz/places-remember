@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=1ea30393-8f41-42f4-8722-d5daa7853b81&lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+    
+        function init() {
+          var myMap = new ymaps.Map("map", {
+            center: [55.76, 37.64],
+            zoom: 10
+          });
+          
+          var coords = [55.76, 37.64];
+          var myPlacemark = new ymaps.Placemark(coords, {}, { draggable: true });
+          myMap.geoObjects.add(myPlacemark);
+          
+          myPlacemark.properties.set({
+            balloonContent: 'Место на карте'
+          });
+          
+          myPlacemark.events.add('dragend', function (e) {
+            var coords = myPlacemark.geometry.getCoordinates();
+            ymaps.geocode(coords).then(function (res) {
+              var firstGeoObject = res.geoObjects.get(0);
+              var address = firstGeoObject.getAddressLine();
+              document.getElementById('address').value = address;
+            });
+          });
+        }
+    </script>
+</head>
+<body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+    <form>
+        <input type="text" name="address" id="address">
+    </form>
+</body>
+</html>

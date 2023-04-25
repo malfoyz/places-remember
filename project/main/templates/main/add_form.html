@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Добавить воспоминание</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=1ea30393-8f41-42f4-8722-d5daa7853b81&lang=ru_RU"></script>
+  <script type="text/javascript">
+    var yMap, yPlacemark;
+
+    ymaps.ready(init);
+
+    function init() {
+      yMap = new ymaps.Map("map", {
+        center: [55.76, 37.64],
+        zoom: 10
+      });
+
+      var coords = [55.76, 37.64];
+      yPlacemark = new ymaps.Placemark(coords, {}, { draggable: true });
+      yMap.geoObjects.add(yPlacemark);
+
+      yPlacemark.properties.set({
+        balloonContent: 'Место на карте'
+      });
+
+      yPlacemark.events.add('dragend', function (e) {
+        var coords = yPlacemark.geometry.getCoordinates();
+        ymaps.geocode(coords).then(function (res) {
+          var firstGeoObject = res.geoObjects.get(0);
+          var address = firstGeoObject.getAddressLine();
+          document.getElementById('address').value = address;
+        });
+      });
+
+      document.getElementById('address').addEventListener('change', function () {
+        var address = document.getElementById('address').value;
+        ymaps.geocode(address).then(function (res) {
+          var firstGeoObject = res.geoObjects.get(0);
+          var coords = firstGeoObject.geometry.getCoordinates();
+          yMap.setCenter(coords, 16);
+          yPlacemark.geometry.setCoordinates(coords);
+        });
+      });
+
+      var suggestView = new ymaps.SuggestView('address');
+
+      suggestView.events.add('suggestselect', function (e) {
+        var address = e.get('item').value;
+        document.getElementById('address').value = address;
+        ymaps.geocode(address).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+            var coords = firstGeoObject.geometry.getCoordinates();
+            yMap.setCenter(coords, 16);
+            yPlacemark.geometry.setCoordinates(coords);
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Воспоминания</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Выйти</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-5">
+    <form>
+      <div class="form-group">
+        <label for="inputAddress">Место</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="Введите место">
+      </div>
+      <div class="form-group">
+        <label for="inputComment">Комментарий</label>
+        <textarea class="form-control" id="inputComment" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="inputComment">Место</label>
+        <input type="text" class="form-control" name="address" id="address" rows="3"></textarea>
+      </div>
+      <div id="map" style="width: 600px; height: 400px"></div>
+      <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+    </form>
+  </div>
+</body>
+</html>
