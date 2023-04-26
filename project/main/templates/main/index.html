@@ -5,7 +5,7 @@
 
 {% block content %}
   {% if user.is_authenticated %}
-  <main class="container py-5 text-center">
+  <section class="container py-5 text-center">
     {% if memories %}
     <div class="text-center">
       <a href="{% url 'main:add_memory' %}" class="btn btn-primary btn-lg mb-4">Add memory</a>
@@ -25,8 +25,8 @@
             <td>{{ memory.place }}</td>
             <td>{{ memory.memory }}</td>
             <td>
-              <button class="btn btn-secondary me-2">Edit</button>
-              <button class="btn btn-danger">Delete</button>
+              <a href="{% url 'main:edit_memory' memory.pk %}" class="btn btn-secondary me-2">Edit</a>
+              <a href="{% url 'main:delete_memory' memory.pk %}" class="btn btn-danger">Delete</a>
             </td>
           </tr>
         {% endfor %}
@@ -35,9 +35,9 @@
     </div>
     {% else %}
     <h2 class="fw-normal">You don't have any memories</h2>
-    <a href="#" class="btn btn-primary btn-lg my-4">Add a memory</a>
+    <a href="{% url 'main:add_memory' %}" class="btn btn-primary btn-lg my-4">Add a memory</a>
     {% endif %}
-  </main>
+  </section>
   {% else %}
   <div class="container py-5 text-center">
     <h1>Places Remember</h1>

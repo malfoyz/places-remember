@@ -8,16 +8,25 @@
 
 {% block content %}
 <div class="container mt-5">
-  <form>
+  <h2 class="text-center my-4">{{ title }}</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="text-danger">{{ form.non_field_errors }}</div>
     <div class="form-group">
-      <label for="inputAddress">Место</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="Введите место">
+      {{ form.place.label_tag }}
+      {{ form.place }}
     </div>
-    <div id="map" style="width: 500px; height: 300px"></div>
+    <div class="text-danger">{{ form.place.errors }}</div>
+    <div id="map" class="my-3" style="width: 500px; height: 300px"></div>
     <div class="form-group">
-      <label for="inputComment">Воспоминание</label>
-      <textarea class="form-control" id="inputComment" rows="3"></textarea>
+      {{ form.memory.label_tag }}
+      {{ form.memory }}
     </div>
+    <div class="text-danger">{{ form.memory.errors }}</div>
+    <div class="form-group">
+      {{ form.user }}
+    </div>
+    <div class="text-danger">{{ form.user.errors }}</div>
     <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
   </form>
 </div>

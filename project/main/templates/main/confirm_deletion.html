@@ -1,0 +1,11 @@
+{% extends 'main/layout/base.html' %}
+
+{% block content %}
+<section class="container py-5 text-center">
+    <h2 class="fw-normal">Do you really want to delete the memory of {{ place }}?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-lg my-4">Confirm</a>
+    </form>
+</section>
+{% endblock content %}

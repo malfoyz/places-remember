@@ -2,13 +2,23 @@ var yMap, yPlacemark;
 
 ymaps.ready(init);
 
-function init() {
+async function init() {
+    var place_input = document.getElementById('id_place')
+
+    if (place_input.value) {
+        var data = await ymaps.geocode(place_input.value)
+        var firstGeoObject = data.geoObjects.get(0);
+        var coords = firstGeoObject.geometry.getCoordinates();
+    }
+    else {
+        var coords = [55.76, 37.64]
+    }
+
     yMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
-        zoom: 10
+        center: coords,
+        zoom: 10,
     });
 
-    var coords = [55.76, 37.64];
     yPlacemark = new ymaps.Placemark(coords, {}, { draggable: true });
     yMap.geoObjects.add(yPlacemark);
 
@@ -16,35 +26,32 @@ function init() {
         balloonContent: 'Место на карте'
     });
 
-    yPlacemark.events.add('dragend', function (e) {
+    yPlacemark.events.add('dragend', async (e) => {
         var coords = yPlacemark.geometry.getCoordinates();
-        ymaps.geocode(coords).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            var address = firstGeoObject.getAddressLine();
-            document.getElementById('address').value = address;
-        });
+        var data = await ymaps.geocode(coords);
+        var firstGeoObject = data.geoObjects.get(0);
+        var address = firstGeoObject.getAddressLine();
+        document.getElementById('id_place').value = address;
     });
 
-    document.getElementById('address').addEventListener('change', function () {
-        var address = document.getElementById('address').value;
-        ymaps.geocode(address).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            var coords = firstGeoObject.geometry.getCoordinates();
-            yMap.setCenter(coords, 16);
-            yPlacemark.geometry.setCoordinates(coords);
-        });
+    document.getElementById('id_place').addEventListener('change', async () => {
+        var address = document.getElementById('id_place').value;
+        var data = await ymaps.geocode(address);
+        var firstGeoObject = data.geoObjects.get(0);
+        var coords = firstGeoObject.geometry.getCoordinates();
+        yMap.setCenter(coords, 16);
+        yPlacemark.geometry.setCoordinates(coords);
     });
 
-    var suggestView = new ymaps.SuggestView('address');
+    var suggestView = new ymaps.SuggestView('id_place');
 
-    suggestView.events.add('suggestselect', function (e) {
+    suggestView.events.add('suggestselect', async (e) => {
         var address = e.get('item').value;
-        document.getElementById('address').value = address;
-        ymaps.geocode(address).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            var coords = firstGeoObject.geometry.getCoordinates();
-            yMap.setCenter(coords, 16);
-            yPlacemark.geometry.setCoordinates(coords);
-        });
+        document.getElementById('id_place').value = address;
+        var data = await ymaps.geocode(address);
+        var firstGeoObject = data.geoObjects.get(0);
+        var coords = firstGeoObject.geometry.getCoordinates();
+        yMap.setCenter(coords, 16);
+        yPlacemark.geometry.setCoordinates(coords);
     });
 }

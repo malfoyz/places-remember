@@ -8,10 +8,10 @@ class PlaceMemory(models.Model):
 
     place = models.CharField(
         max_length=300,
-        verbose_name=_('City'),
+        verbose_name=_('Place'),
     )
     memory = models.TextField(
-        verbose_name=_('Description'),
+        verbose_name=_('Memory'),
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -32,3 +32,6 @@ class PlaceMemory(models.Model):
     class Meta:
         verbose_name = _('Memory of a place')
         verbose_name_plural = _('Memories of places')
+
+    def __str__(self) -> str:
+        return self.place
