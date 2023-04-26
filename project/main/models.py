@@ -6,11 +6,11 @@ from django.utils.translation import gettext_lazy as _
 class PlaceMemory(models.Model):
     """Place memory model"""
 
-    city = models.CharField(
+    place = models.CharField(
         max_length=300,
         verbose_name=_('City'),
     )
-    description = models.TextField(
+    memory = models.TextField(
         verbose_name=_('Description'),
     )
     created_at = models.DateTimeField(
