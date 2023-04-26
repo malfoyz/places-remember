@@ -23,7 +23,10 @@ def index(request: HttpRequest) -> HttpResponse:
 def add_memory(request: HttpRequest) -> HttpResponse:
     """Memory add page handler"""
 
-    pass
+    return render(
+        request=request,
+        template_name='main/add_memory.html',
+    )
 
 
 def logout_view(request: HttpRequest) -> HttpResponseRedirect:
