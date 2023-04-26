@@ -1,0 +1,61 @@
+{% extends 'main/layout/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+
+{% block content %}
+  {% if user.is_authenticated %}
+  <main class="container py-5">
+    <div class="text-center">
+      <a href="#" class="btn btn-primary btn-lg mb-4">Добавить воспоминание</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Places Remember</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Воспоминание 1</td>
+            <td>Комментарий 1</td>
+            <td>
+              <button class="btn btn-secondary me-2">Редактировать</button>
+              <button class="btn btn-danger">Удалить</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Воспоминание 2</td>
+            <td>Комментарий 2</td>
+            <td>
+              <button class="btn btn-secondary me-2">Редактировать</button>
+              <button class="btn btn-danger">Удалить</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Воспоминание 3</td>
+            <td>Комментарий 3</td>
+            <td>
+              <button class="btn btn-secondary me-2">Редактировать</button>
+              <button class="btn btn-danger">Удалить</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  {% else %}
+  <div class="container py-5 text-center">
+    <h1>Places Remember</h1>
+    <p class="lead">Welcome! Thanks to this site you can leave a memory of the places you visited.</p>
+    <p class="lead">First, log in to one of the social networks below:</p>
+    <div class="d-grid gap-2 col-md-6 mx-auto">
+      <a href="{% provider_login_url 'google' %}" class="btn btn-primary btn-lg">Google</a>
+      <a href="{% provider_login_url 'vk' %}" class="btn btn-danger btn-lg">VK</a>
+    </div>
+  </div>
+  {% endif %}
+{% endblock content %}

@@ -1,0 +1,42 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Places Remember</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <header class="bg-light py-3">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <a href="{% url 'main:index' %}" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+          <img src="{% static 'main/location.png' %}" style="max-width: 30px;" alt="logo" class="me-2">
+          <span class="fs-4 ml-1">Places Remember</span>
+        </a>
+        {% if user.is_authenticated %}
+        <div class="text-end">
+          {% for account in user.socialaccount_set.all %}
+          <img src="{{ account.get_avatar_url }}" style="max-width: 30px;" alt="avatar" class="rounded-circle me-2">
+          {% endfor %}
+          <span class="fw-bold">{{ user.first_name }} {{ user.last_name }}</span>
+          <a href="{% url 'main:logout' %}" class="btn btn-danger ms-3">Выйти</a>
+        </div>
+        {% else %}
+        <div class="text-end">
+          <span class="fw-bold">Гость</span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  {% block content %}
+  <!-- Content -->
+  {% endblock content %}
+</body>
+</html>
