@@ -32,6 +32,17 @@
         {% endfor %}
         </tbody>
       </table>
+      {% if page.has_other_pages %}
+      <div class="d-flex align-items-center justify-content-center">
+        {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}"><img src="{% static 'main/img/previous.png' %}" style="max-width: 20px;"></a>
+        {% endif %}
+        <p class="text-normal my-auto fs-5 mx-3">{{ page.number }} of {{ page.paginator.num_pages }}</p>
+        {% if page.has_next %}
+        <a href="?page={{ page.next_page_number }}"><img src="{% static 'main/img/next.png' %}" style="max-width: 20px;"></a>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
     {% else %}
     <h2 class="fw-normal">You don't have any memories</h2>

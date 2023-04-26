@@ -32,6 +32,7 @@ class PlaceMemory(models.Model):
     class Meta:
         verbose_name = _('Memory of a place')
         verbose_name_plural = _('Memories of places')
+        ordering = ('-updated_at',)
 
     def __str__(self) -> str:
         return self.place

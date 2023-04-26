@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.contrib.auth import logout
+from django.core.paginator import Paginator
 from django.http import (HttpRequest, HttpResponse, HttpResponseForbidden,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
@@ -13,8 +14,17 @@ def index(request: HttpRequest) -> HttpResponse:
     """Home page handler"""
 
     memories = PlaceMemory.objects.filter(user=request.user.pk)
+
+    paginator = Paginator(memories, 8)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+    page = paginator.get_page(page_num)
+
     context = {
-        'memories': memories,
+        'memories': page.object_list,
+        'page': page,
     }
 
     return render(
