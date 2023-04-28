@@ -19,7 +19,7 @@ class PlaceMemory(models.Model):
     )
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_('Updated_at'),
+        verbose_name=_('Updated at'),
     )
     user = models.ForeignKey(
         to=User,
